@@ -32,8 +32,9 @@ def create_app(test_config=None):
     """
     @app.route('/')
     def index():
+        categories = Category.query.all()
         return jsonify({
-            "success": True
+            "categories": [category.format() for category in categories]
         })
 
     """
