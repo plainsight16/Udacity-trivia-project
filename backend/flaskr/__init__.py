@@ -1,4 +1,5 @@
 import os
+from unicodedata import category
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -34,32 +35,52 @@ def create_app(test_config=None):
         })
 
     """
-    @TODO:
-    Create an endpoint to handle GET requests for questions,
-    including pagination (every 10 questions).
-    This endpoint should return a list of questions,
-    number of total questions, current category, categories.
-    
-
     TEST: At this point, when you start the application
     you should see questions and categories generated,
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions.
     """
-    @app.route('/questions')
-    def get_questions():
-        return jsonify({
-            "success": True
-        })
+    @app.route('/categories/<int:id>/questions')
+    def get_questions(id):
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * QUESTIONS_PER_PAGE
+        end = start + QUESTIONS_PER_PAGE
+        try:
+            current_category = Category.query.filter(
+                Category.id == id).one_or_none().format()
+            if current_category == None:
+                abort(404)
+            questions = [question.format()
+                         for question in Question.query.order_by(Question.id).filter(Question.category == id).all()]
+            categories = [category.format()
+                          for category in Category.query.order_by(Category.id).all()]
+            return jsonify({
+                "success": True,
+                "questions": questions[start:end],
+                "total_questions": len(questions),
+                "current_category": current_category,
+                "categories": categories
+            })
+        except:
+            abort(500)
 
     """
-    @TODO:
-    Create an endpoint to DELETE question using a question ID.
-
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
-
+    @app.route('/questions/<int:id>')
+    def delete_question(id):
+        question = Question.query.filter(Question.id == id).one_or_none()
+        if question == None:
+            abort(404)
+        question.delete()
+        total_question = [question.format()
+                          for question in Question.query.all()]
+        return jsonify({
+            "success": True,
+            "deleted": id,
+            "total_questions": len(total_question)
+        })
     """
     @TODO:
     Create an endpoint to POST a new question,
@@ -70,6 +91,14 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.
     """
+    @app.route('/question', methods=['POST'])
+    def create_question():
+        data = request.get_json()
+        if data is None:
+            abort(404)
+        try:
+            new_question = Question(question=data.get("question"), answer=data.get(
+                'answer'), category=data.get("category"), difficulty=data.get('difficulty'))
 
     """
     @TODO:
