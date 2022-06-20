@@ -59,13 +59,23 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data["current_category"]))
         self.assertTrue(len(data["categories"]))
 
-    def test_delete_questions(self):
-        res = self.client().get('/questions/18')
+    # def test_delete_questions(self):
+    #     res = self.client().get('/questions/18')
+    #     data = json.loads(res.data)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertEqual(data["success"], True)
+    #     self.assertEqual(data["deleted"], 18)
+    #     self.assertTrue(data['total_questions'])
+
+    def test_create_questions(self):
+        res = self.client().post('/questions',
+                                 json={"question": "What is python", "answer": "A versatile Programming Language", "category": "3", "difficulty": "5"})
+
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertEqual(data["deleted"], 18)
-        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data["questions"]))
+        self.assertTrue(data["total_questions"])
 
 
 # Make the tests conveniently executable
