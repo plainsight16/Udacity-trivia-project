@@ -2,7 +2,7 @@
 
 ## API ENDPOINTS
 
-Base Url - http://127.0.0.1:5000
+**Base Url** - `http://127.0.0.1:5000`
 
 ### Available Endpoints
 - Categories
@@ -57,15 +57,16 @@ Example response
   "success": true
 }
 ```
+
 #### 2. GET '/categories'
 ``` curl http://127.0.0.1:5000/categories/<int:id>/questions```
 - Fetches a dictionary of questions which are of the same type of category specified using `id` in the request arguments
 - Request Arguments - `id`
 - Returns an object with keys;
-    i. boolean `success`,
-    ii. list of dictionary `questions`,
-    iii. int `current_category`,
-    iv. int `total_questions`
+    i. **boolean** `success`,
+    ii. **list** of dict `questions`,
+    iii. **integer** `current_category`,
+    iv. **integer** `total_questions`
 - Example Response
     ```
         {
@@ -114,4 +115,153 @@ Example response
 
 ### 3. GET '/questions?page=1'
 ``` curl http://127.0.0.1:5000/questions?page=1 ```
-- Fetches a dictionary of questions 
+- Fetches a dictionary of questions
+- Request Arguments: integer `page` (optional, 10 questions per page, defaults to 1 when not specified)
+- Returns an object with keys;
+    i. **boolean** `success`,
+    ii. **list** of dict `questions` with keys;
+        - **string** `answer`,
+        - **integer** `category`,
+        - **integer** `difficulty`,
+        - **integer** `id`,
+        - **string** `question`,
+    iii. **list** `current_category`,
+    iv. **list** `category`
+    iv. **integer** `total_questions`
+
+- Example Response
+```
+    "categories": [
+    "Science",
+    "Art",
+    "Geography",
+    "History",
+    "Entertainment",
+    "Sports"
+    ],
+    "current_category": [
+        "Science",
+        "Art",
+        "Geography",
+        "History",
+        "Entertainment",
+        "Sports"
+    ],
+    "questions": [
+        {
+        "answer": "Edward Scissorhands",
+        "category": 5,
+        "difficulty": 3,
+        "id": 6,
+        "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+        "answer": "Muhammad Ali",
+        "category": 4,
+        "difficulty": 1,
+        "id": 9,
+        "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+        "answer": "Brazil",
+        "category": 6,
+        "difficulty": 3,
+        "id": 10,
+        "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+       [...]
+    ],
+    "success": true,
+    "total_questions": 10
+    }
+```
+
+### 4. POST '/questions'
+- Create a new question
+``` $ curl -X POST -H 'Content-type:application/json' -d '{"answer":"Asia", "question":"Where is China?" "category":"1", "difficulty":"2"}', http://127.0.0.1:5000/questions ```
+    - creates a new question and inserts into the database
+    - Request Headers: ```application/json```
+        - **string** `answer`,
+        - **integer** `category`,
+        - **integer** `difficulty`,
+        - **string** `question`
+    - Example Response
+    ```
+        {    
+            "questions": [
+                {
+                "answer": "Edward Scissorhands",
+                "category": 5,
+                "difficulty": 3,
+                "id": 6,
+                "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+                },
+                {
+                "answer": "Muhammad Ali",
+                "category": 4,
+                "difficulty": 1,
+                "id": 9,
+                "question": "What boxer's original name is Cassius Clay?"
+                },
+                {
+                "answer": "Brazil",
+                "category": 6,
+                "difficulty": 3,
+                "id": 10,
+                "question": "Which is the only team to play in every soccer World Cup tournament?"
+                },
+            [...] 
+        "success": true,
+            "total_questions": 10 
+        }
+    ```
+- Search for a question
+``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"What"}' http://127.0.0.1:5000/questions ```
+    - Probes thorough the database using a serch_term for a particullar question
+    - Request Headers: `application/json`
+        - **string** `searchTerm`
+    - Example Response
+    ```
+         {
+            "answer": "Aot",
+            "category": 1,
+            "difficulty": 5,
+            "id": 25,
+            "question": "What is my best anime"
+        },
+    ```
+
+
+### 5. DELETE '/questions/<int:id>'
+``` $ curl -X DELETE http://127.0.0.1:5000/questions/3 ```
+- Deletes a question with id:`id` from the database
+- Request Argument: int:id
+- Example Response
+```
+    {
+        "success": True,
+        "deleted": 3,
+        "total_questions": 9
+    }
+
+```
+
+### 6. POST '/quizzes'
+Get a random question 
+``` $ curl -X POST -H 'Content-type:application/json' -d '{"previous_question":"3", "quiz_category":{"type" : "Science", "id" : "1"}}' ```
+- Retrieves a random question that has not been previously retrived from the database
+- Request Header: `application/json`
+- Example Response
+```
+    {
+        "success": True
+        "question": {
+            {
+                "answer": "Edward Scissorhands",
+                "category": 5,
+                "difficulty": 3,
+                "id": 6,
+                "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+            }
+        }
+    }
