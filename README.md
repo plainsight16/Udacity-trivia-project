@@ -20,17 +20,98 @@ Base Url - http://127.0.0.1:5000
 
 #### 1. GET '/categories'
 
-""" $ curl http://127.0.0.1:5000/categories """
+``` $ curl http://127.0.0.1:5000/categories ```
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, """categories""", that contains an object of """id: category_string""" key: value pairs.
 
 Example response
-"""
+```
 {
-    "success": True,
-    "categories": {
-
+    "categories": [
+    {
+      "id": 1,
+      "type": "Science"
+    },
+    {
+      "id": 2,
+      "type": "Art"
+    },
+    {
+      "id": 3,
+      "type": "Geography"
+    },
+    {
+      "id": 4,
+      "type": "History"
+    },
+    {
+      "id": 5,
+      "type": "Entertainment"
+    },
+    {
+      "id": 6,
+      "type": "Sports"
     }
+  ],
+  "success": true
 }
-"""
+```
+#### 2. GET '/categories'
+``` curl http://127.0.0.1:5000/categories/<int:id>/questions```
+- Fetches a dictionary of questions which are of the same type of category specified using `id` in the request arguments
+- Request Arguments - `id`
+- Returns an object with keys;
+    i. boolean `success`,
+    ii. list of dictionary `questions`,
+    iii. int `current_category`,
+    iv. int `total_questions`
+- Example Response
+    ```
+        {
+            "current_category": 1,
+            "questions": [
+                {
+                "answer": "The Liver",
+                "category": 1,
+                "difficulty": 4,
+                "id": 20,
+                "question": "What is the heaviest organ in the human body?"
+                },
+                {
+                "answer": "Alexander Fleming",
+                "category": 1,
+                "difficulty": 3,
+                "id": 21,
+                "question": "Who discovered penicillin?"
+                },
+                {
+                "answer": "Blood",
+                "category": 1,
+                "difficulty": 4,
+                "id": 22,
+                "question": "Hematology is a branch of medicine involving the study of what?"
+                },
+                {
+                "answer": "Bakare",
+                "category": 1,
+                "difficulty": 5,
+                "id": 24,
+                "question": "What is my name"
+                },
+                {
+                "answer": "Aot",
+                "category": 1,
+                "difficulty": 5,
+                "id": 25,
+                "question": "What is my best anime"
+                }
+            ],
+            "success": true,
+            "total_questions": 5
+        }
+    ```
+
+### 3. GET '/questions?page=1'
+``` curl http://127.0.0.1:5000/questions?page=1 ```
+- Fetches a dictionary of questions 
