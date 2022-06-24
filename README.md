@@ -115,12 +115,10 @@ Example response
 - Errors
     - Passing in an unknown id `curl http://127.0.0.1:5000/categories/20000/questions`
     - Returns
-    ```
-        {
+        ```{
             "success": False,
             "message": "Resource not found"
-        }
-    ```
+        }```
 
 ### 3. GET '/questions?page=1' <a name="get-questions"></a>
 ``` curl http://127.0.0.1:5000/questions?page=1 ```
@@ -186,10 +184,12 @@ Example response
 - Errors 
     - Requesting for a page that does not exist `$ curl http://127.0.0.1:5000/questions?page=2000`
     - Returns 
+        ```
         {
             "success": False,
             "message": 'Resource not found'
         }
+        ```
 
 ### 4. POST '/questions'<a name="post-questions"></a>
 - Create a new question
@@ -233,10 +233,12 @@ Example response
     - Errors 
         - When a parameter is missing ``` $ curl -X POST -H 'Content-type:application/json' -d '{"answer":"Asia", "question":"Where is China?" "category":"1"}' http://127.0.0.1:5000/questions ```
         - Returns 
-        {
-            "success": False,
-            "message": "Bad request"
-        }
+        ```
+            {
+                "success": False,
+                "message": "Bad request"
+            }
+        ```
 
 - Search for a question
 ``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"What"}' http://127.0.0.1:5000/questions ```
@@ -256,10 +258,12 @@ Example response
     - Errors
         - When SearchTerm cannot be found ``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"flippity"}' http://127.0.0.1:5000/questions ```
         - Returns
-            {
-                "success": False,
-                "message": "Resource not found"
-            }
+            ```
+                {
+                    "success": False,
+                    "message": "Resource not found"
+                }
+            ```
 
 ### 5. DELETE '/questions/<int:id>' <a name="delete-questions"></a>
 ``` $ curl -X DELETE http://127.0.0.1:5000/questions/3 ```
@@ -277,10 +281,12 @@ Example response
 - Errors
     - When deleting a id that does not exist in the database ` $ curl -X DELETE http://127.0.0.1:5000/questions/3000`
     - Returns
-        {
-            "success": False,
-            "message": "Resource not found"
-        }
+        ```
+            {
+                "success": False,
+                "message": "Resource not found"
+            }
+        ```
 ### 6. POST '/quizzes' <a name="post-quizzes"></a>
 Get a random question 
 ``` $ curl -X POST -H 'Content-type:application/json' -d '{"previous_question":"3", "quiz_category":{"type" : "Science", "id" : "1"}}' ```
@@ -304,7 +310,9 @@ Get a random question
 - Errors
     - posting without content `curl -X POST http://127.0.0.1:5000/quizzes`
     - Returns
-        {
-           "success": False,
-           "message": "Bad request" 
-        }
+        ```
+            {
+            "success": False,
+            "message": "Bad request" 
+            }
+        ```
