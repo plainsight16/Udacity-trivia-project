@@ -23,7 +23,7 @@
 ``` $ curl http://127.0.0.1:5000/categories ```
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, """categories""", that contains an object of """id: category_string""" key: value pairs.
+- Returns: An object with a single key, `categories`, that contains an object of id: `category_string` key: value pairs.
 
 Example response
 ```
@@ -115,10 +115,12 @@ Example response
 - Errors
     - Passing in an unknown id `curl http://127.0.0.1:5000/categories/20000/questions`
     - Returns
-        ```{
+        ```
+        {
             "success": False,
             "message": "Resource not found"
-        }```
+        }
+        ```
 
 ### 3. GET '/questions?page=1' <a name="get-questions"></a>
 ``` curl http://127.0.0.1:5000/questions?page=1 ```
@@ -253,7 +255,7 @@ Example response
             "difficulty": 5,
             "id": 25,
             "question": "What is my best anime"
-        },
+        }
     ```
     - Errors
         - When SearchTerm cannot be found ``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"flippity"}' http://127.0.0.1:5000/questions ```
