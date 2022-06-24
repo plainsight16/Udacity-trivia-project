@@ -6,19 +6,19 @@
 
 ### Available Endpoints
 - Categories
-    - GET '/categories'
-    - GET '/categories/<int:id>/questions'
+    - [GET '/categories'](#get-categories)
+    - [GET '/categories/<int:id>/questions'](#get-categories-questions)
 
 - Questions
-    - GET '/questions?page=2'
-    - POST '/questions'
-    - DELETE '/questions/<int:id>'
+    - [GET '/questions?page=2'](#get-questions)
+    - [POST '/questions'](#post-questions)
+    - [DELETE '/questions/<int:id>'](#delete-questions)
 
 - Quizzes
-    - POST '/quizzes'
+    - [POST '/quizzes'](#post-quizzes)
 
 
-#### 1. GET '/categories'
+#### 1. GET '/categories'<a name="get-categories"></a>
 
 ``` $ curl http://127.0.0.1:5000/categories ```
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -58,7 +58,7 @@ Example response
 }
 ```
 
-#### 2. GET '/categories'
+#### 2. GET '/categories/<int:id>/questions'<a name="get-categories-questions"></a>
 ``` curl http://127.0.0.1:5000/categories/<int:id>/questions```
 - Fetches a dictionary of questions which are of the same type of category specified using `id` in the request arguments
 - Request Arguments - `id`
@@ -112,8 +112,17 @@ Example response
             "total_questions": 5
         }
     ```
+- Errors
+    - Passing in an unknown id `curl http://127.0.0.1:5000/categories/20000/questions`
+    - Returns
+    ```
+        {
+            "success": False,
+            "message": "Resource not found"
+        }
+    ```
 
-### 3. GET '/questions?page=1'
+### 3. GET '/questions?page=1' <a name="get-questions"></a>
 ``` curl http://127.0.0.1:5000/questions?page=1 ```
 - Fetches a dictionary of questions
 - Request Arguments: integer `page` (optional, 10 questions per page, defaults to 1 when not specified)
@@ -128,7 +137,6 @@ Example response
     iii. **list** `current_category`,
     iv. **list** `category`
     iv. **integer** `total_questions`
-
 - Example Response
 ```
     "categories": [
@@ -175,10 +183,17 @@ Example response
     "total_questions": 10
     }
 ```
+- Errors 
+    - Requesting for a page that does not exist `$ curl http://127.0.0.1:5000/questions?page=2000`
+    - Returns 
+        {
+            "success": False,
+            "message": 'Resource not found'
+        }
 
-### 4. POST '/questions'
+### 4. POST '/questions'<a name="post-questions"></a>
 - Create a new question
-``` $ curl -X POST -H 'Content-type:application/json' -d '{"answer":"Asia", "question":"Where is China?" "category":"1", "difficulty":"2"}', http://127.0.0.1:5000/questions ```
+``` $ curl -X POST -H 'Content-type:application/json' -d '{"answer":"Asia", "question":"Where is China?" "category":"1", "difficulty":"2"}' http://127.0.0.1:5000/questions ```
     - creates a new question and inserts into the database
     - Request Headers: ```application/json```
         - **string** `answer`,
@@ -215,6 +230,14 @@ Example response
             "total_questions": 10 
         }
     ```
+    - Errors 
+        - When a parameter is missing ``` $ curl -X POST -H 'Content-type:application/json' -d '{"answer":"Asia", "question":"Where is China?" "category":"1"}' http://127.0.0.1:5000/questions ```
+        - Returns 
+        {
+            "success": False,
+            "message": "Bad request"
+        }
+
 - Search for a question
 ``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"What"}' http://127.0.0.1:5000/questions ```
     - Probes thorough the database using a serch_term for a particullar question
@@ -230,9 +253,15 @@ Example response
             "question": "What is my best anime"
         },
     ```
+    - Errors
+        - When SearchTerm cannot be found ``` $ curl -X POST -H 'Content-type:application/json' -d '{"searchTerm":"flippity"}' http://127.0.0.1:5000/questions ```
+        - Returns
+            {
+                "success": False,
+                "message": "Resource not found"
+            }
 
-
-### 5. DELETE '/questions/<int:id>'
+### 5. DELETE '/questions/<int:id>' <a name="delete-questions"></a>
 ``` $ curl -X DELETE http://127.0.0.1:5000/questions/3 ```
 - Deletes a question with id:`id` from the database
 - Request Argument: int:id
@@ -245,8 +274,14 @@ Example response
     }
 
 ```
-
-### 6. POST '/quizzes'
+- Errors
+    - When deleting a id that does not exist in the database ` $ curl -X DELETE http://127.0.0.1:5000/questions/3000`
+    - Returns
+        {
+            "success": False,
+            "message": "Resource not found"
+        }
+### 6. POST '/quizzes' <a name="post-quizzes"></a>
 Get a random question 
 ``` $ curl -X POST -H 'Content-type:application/json' -d '{"previous_question":"3", "quiz_category":{"type" : "Science", "id" : "1"}}' ```
 - Retrieves a random question that has not been previously retrived from the database
@@ -265,3 +300,11 @@ Get a random question
             }
         }
     }
+```
+- Errors
+    - posting without content `curl -X POST http://127.0.0.1:5000/quizzes`
+    - Returns
+        {
+           "success": False,
+           "message": "Bad request" 
+        }

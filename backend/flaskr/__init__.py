@@ -171,7 +171,7 @@ def create_app(test_config=None):
     def get_random_question():
         data = request.get_json()
         if data is None:
-            abort(404)
+            abort(400)
         category = data.get("quiz_category", None)
         previous_questions = data.get("previous_questions", None)
         if not previous_questions:

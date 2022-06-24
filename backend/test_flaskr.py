@@ -154,9 +154,9 @@ class TriviaTestCase(unittest.TestCase):
     def test_404_for_get_random_question(self):
         res = self.client().post('/quizzes')
         data = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 400)
         self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "Resource not found")
+        self.assertEqual(data["message"], "Bad request")
 
 
 # Make the tests conveniently executable
