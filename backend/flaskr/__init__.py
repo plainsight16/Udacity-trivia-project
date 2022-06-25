@@ -183,10 +183,10 @@ def create_app(test_config=None):
         else:
             if category:
                 questions = Question.query.filter(Question.category == category['id']).filter(
-                    Question.id.not_in(previous_questions)).all()
+                    Question.id.notin_(previous_questions)).all()
             else:
                 questions = Question.query.filter(
-                    Question.id.not_in(previous_questions)).all()
+                    Question.id.notin_(previous_questions)).all()
 
         questions = [question.format() for question in questions]
         total_questions = len(questions)
