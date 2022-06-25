@@ -43,9 +43,11 @@ def create_app(test_config=None):
     @app.route('/categories')
     def get_categories():
         categories = Category.query.all()
+        categories = format_selection(categories)
+        categories = [category['type'] for category in categories]
         return jsonify({
             "success": True,
-            "categories": paginated_selection(request, categories)
+            "categories": categories
         })
 
     """
