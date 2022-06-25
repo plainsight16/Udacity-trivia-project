@@ -3,15 +3,16 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 from urllib.parse import quote_plus as urlquote
+from settings import DB_NAME, DB_USER, DB_PASSWORD
 
-database_name = 'trivia'
-database_path = 'postgresql://postgres:%s@localhost:5432/trivia' % urlquote(
-    "theceo@16")
+database_name = DB_NAME
+database_path = f'postgresql://{DB_USER}:%s@localhost:5432/{DB_NAME}' % urlquote(
+    DB_PASSWORD)
 
 db = SQLAlchemy()
 
 """
-setup_db(app)
+setup_db(app)   
     binds a flask application and a SQLAlchemy service
 """
 
